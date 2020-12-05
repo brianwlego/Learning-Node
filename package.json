@@ -1,0 +1,24 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "\"Learning Node.js\"",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brianwlego/Learning-Node.git"
+  },
+  "author": "Brian Lego",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brianwlego/Learning-Node/issues"
+  },
+  "homepage": "https://github.com/brianwlego/Learning-Node#readme"
+}
