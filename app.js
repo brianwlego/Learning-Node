@@ -3,20 +3,30 @@ const bodyParser = require('body-parser');
 const path = require('path')
 
 const app = express();
+app.set('view engine', 'pug');
+app.set('views', 'views')
 
-const adminRoutes = require('./routes/admin')
+//Pulling in route files
+const adminData = require('./routes/admin')
 const shopRoutes = require('./routes/shop')
 
 app.use(bodyParser.urlencoded({extended: false}));
+
+//Pulling in static files ie CSS, HTML, JS files, etc.
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/admin', adminRoutes);
+//Using route declarations
+//Namespacing the 'admin' routes
+app.use('/admin', adminData.routes);
 app.use(shopRoutes);
 
-//Error catching
+//Error catching 
 app.use((req, res, next) => {
-  res.status(404).sendFile(path.join(__dirname, 'views', '404.html'))
+  // res.status(404).sendFile(path.join(__dirname, 'views', '404.html'))
+
+  res.status(404).render('404', {docTitle: 'Page Not Found'})
 });
 
+//Port to start server on
 app.listen(3000);
 
