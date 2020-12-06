@@ -1,10 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path')
+const expressHbs = require('express-handlebars')
 
 const app = express();
-app.set('view engine', 'pug');
+
+app.engine('hbs', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layout.hbs'}));
+app.set('view engine', 'hbs');
 app.set('views', 'views')
+
+// app.set('view engine', 'pug');
 
 //Pulling in route files
 const adminData = require('./routes/admin')
