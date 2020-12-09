@@ -1,7 +1,7 @@
-const path = require('path')
+// const path = require('path')
 const express = require('express')
 
-const rootDir = require('../utility/path')
+// const rootDir = require('../utility/path')
 
 const router = express.Router();
 
@@ -12,10 +12,7 @@ router.get('/add-product', (req, res, next) => {
 
   res.render('add-product', {
     docTitle: 'Add Product', 
-    path: '/admin/add-product',
-    formsCSS: true,
-    productCSS: true, 
-    activeProduct: true
+    path: '/admin/add-product'
   })
 });
 
