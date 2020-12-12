@@ -18,9 +18,9 @@ const adminRoutes = require('./routes/admin')
 const shopRoutes = require('./routes/shop')
 const errorController = require('./controllers/error')
 
+const sequelize = require('./utility/database')
 
 app.use(bodyParser.urlencoded({extended: false}));
-
 //Pulling in static files ie CSS, HTML, JS files, etc.
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -28,10 +28,14 @@ app.use(express.static(path.join(__dirname, 'public')))
 //Namespacing the 'admin' routes
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
-
 //Error catching 
 app.use(errorController.get404);
 
-//Port to start server on
-app.listen(3000);
+sequelize.sync()
+  .then(result => {
+    //Port to start server on
+    app.listen(3000);
+  })
+  .catch(console.log)
+
 
