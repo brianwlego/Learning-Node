@@ -12,7 +12,6 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', 'views')
 
-const db = require('./utility/database')
 
 //Pulling in route files
 const adminRoutes = require('./routes/admin')
