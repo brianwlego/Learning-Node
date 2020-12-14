@@ -1,7 +1,7 @@
 const Product = require('../models/product')
 
 exports.getIndex = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then(products => {
       res.render('shop/index', {
         prods: products, 
@@ -12,7 +12,7 @@ exports.getIndex = (req, res, next) => {
     .catch(console.log)
 }
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then(products => {
       res.render('shop/product-list', {
         prods: products, 
@@ -23,12 +23,10 @@ exports.getProducts = (req, res, next) => {
     .catch(console.log)
 }
 exports.getProduct = (req, res, next) => {
-  //Alternative to show 'where' keyword
-  //Returns an array
-  //Product.findAll({where: {id: req.params.productId}})
 
-  Product.findByPk(req.params.productId)
+  Product.findById(req.params.productId)
     .then(product => {
+      console.log(product)
       res.render('shop/product-detail', {
         pageTitle: product.title,
         path: '/products',

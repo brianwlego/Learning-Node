@@ -36,14 +36,11 @@ exports.postEditProduct = (req, res, next) => {
 }
 
 exports.postAddProduct = (req, res, next) => {
-  req.user.createProduct({
-    title: req.body.title,
-    imgUrl: req.body.imgUrl,
-    price: req.body.price,
-    description: req.body.description
-  })
+  const product = new Product(req.body.title, req.body.price, req.body.description, req.body.imgUrl)
+
+  product.save()
     .then(result => {
-      console.log("Created Product", result)
+      console.log("Created Product")
       res.redirect('/admin/products')
     })
     .catch(console.log)
