@@ -1,3 +1,4 @@
+const mongodb = require('mongodb')
 const Product = require('../models/product')
 
 exports.getAddProduct = (req, res, next) => {
@@ -10,7 +11,7 @@ exports.getAddProduct = (req, res, next) => {
 exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.edit
 
-  Product.findByPk(req.params.id)
+  Product.findById(req.params.id)
     .then(product => {
       if (!product) {return res.redirect('/')}
       res.render('admin/edit-product', {
@@ -23,14 +24,9 @@ exports.getEditProduct = (req, res, next) => {
     .catch(console.log)
 };
 exports.postEditProduct = (req, res, next) => {
-  Product.findByPk(req.body.productId)
-    .then(product => {
-      product.title = req.body.title;
-      product.imgUrl = req.body.imgUrl;
-      product.price = req.body.price;
-      product.description = req.body.description;
-      return product.save();
-    })
+  const product = new Product(req.body.title, req.body.price, req.body.description, req.body.imgUrl, new mongodb.ObjectId(req.body.productId))
+
+  product.save()
     .then(res.redirect('/admin/products'))
     .catch(console.log)
 }
@@ -47,7 +43,7 @@ exports.postAddProduct = (req, res, next) => {
 }
 
 exports.postDeleteProduct = (req, res, next) => {
-  Product.findByPk(req.body.prodId)
+  Product.findById(req.body.prodId)
     .then(product => {
       return product.destroy();
     })
@@ -56,7 +52,7 @@ exports.postDeleteProduct = (req, res, next) => {
 }
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then(products => {
       res.render('admin/products', {
         pageTitle: 'Admin Products',
