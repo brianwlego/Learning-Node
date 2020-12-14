@@ -24,7 +24,7 @@ exports.getEditProduct = (req, res, next) => {
     .catch(console.log)
 };
 exports.postEditProduct = (req, res, next) => {
-  const product = new Product(req.body.title, req.body.price, req.body.description, req.body.imgUrl, new mongodb.ObjectId(req.body.productId))
+  const product = new Product(req.body.title, req.body.price, req.body.description, req.body.imgUrl, req.body.productId)
 
   product.save()
     .then(res.redirect('/admin/products'))
@@ -43,10 +43,7 @@ exports.postAddProduct = (req, res, next) => {
 }
 
 exports.postDeleteProduct = (req, res, next) => {
-  Product.findById(req.body.prodId)
-    .then(product => {
-      return product.destroy();
-    })
+  Product.deleteById(req.body.prodId)
     .then(res.redirect('/admin/products'))
     .catch(console.log)
 }
