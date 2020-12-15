@@ -1,4 +1,3 @@
-const mongodb = require('mongodb')
 const Product = require('../models/product')
 
 exports.getAddProduct = (req, res, next) => {
@@ -8,9 +7,9 @@ exports.getAddProduct = (req, res, next) => {
     editMode: false
   });
 }
+
 exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.edit
-
   Product.findById(req.params.id)
     .then(product => {
       if (!product) {return res.redirect('/')}
@@ -21,41 +20,50 @@ exports.getEditProduct = (req, res, next) => {
         path: '/admin/edit-product'
       });
     })
-    .catch(console.log)
+    .catch((err)=>console.log(err))
 };
-exports.postEditProduct = (req, res, next) => {
-  const product = new Product(req.body.title, req.body.price, req.body.description, req.body.imgUrl, req.body.productId)
 
-  product.save()
-    .then(res.redirect('/admin/products'))
-    .catch(console.log)
+exports.postEditProduct = (req, res, next) => {
+  Product.findById(req.body.productId)
+    .then(product => {
+      product.title = req.body.title;
+      product.price = req.body.price;
+      product.description = req.body.description;
+      product.imgUrl = req.body.imgUrl;
+      return product.save()
+    })
+    .then(()=>res.redirect('/admin/products'))
+    .catch((err)=>console.log(err))
 }
 
 exports.postAddProduct = (req, res, next) => {
-  const product = new Product(req.body.title, req.body.price, req.body.description, req.body.imgUrl, null, req.user._id)
-
+  const product = new Product({
+    title: req.body.title, 
+    price: req.body.price, 
+    description: req.body.description, 
+    imgUrl: req.body.imgUrl, 
+    userId: req.user
+  })
   product.save()
-    .then(result => {
-      console.log("Created Product")
-      res.redirect('/admin/products')
-    })
-    .catch(console.log)
+    .then(()=>res.redirect('/admin/products'))
+    .catch((err)=>console.log(err))
 }
 
 exports.postDeleteProduct = (req, res, next) => {
-  Product.deleteById(req.body.prodId)
-    .then(res.redirect('/admin/products'))
-    .catch(console.log)
+  Product.findByIdAndRemove(req.body.prodId)
+    .then(()=>res.redirect('/admin/products'))
+    .catch((err)=>console.log(err))
 }
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
+  Product.find().populate('userId')
     .then(products => {
+      console.log(products)
       res.render('admin/products', {
         pageTitle: 'Admin Products',
         prods: products,
         path: '/admin/products'
       })
     })
-    .catch(console.log)
+    .catch((err)=>console.log(err))
 }

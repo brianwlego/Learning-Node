@@ -1,7 +1,7 @@
 const Product = require('../models/product')
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then(products => {
       res.render('shop/index', {
         prods: products, 
@@ -9,10 +9,10 @@ exports.getIndex = (req, res, next) => {
         path: '/', 
       });
     })
-    .catch(console.log)
+    .catch((err)=>console.log(err))
 }
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then(products => {
       res.render('shop/product-list', {
         prods: products, 
@@ -20,20 +20,18 @@ exports.getProducts = (req, res, next) => {
         path: '/products', 
       });
     })
-    .catch(console.log)
+    .catch((err)=>console.log(err))
 }
 exports.getProduct = (req, res, next) => {
-
   Product.findById(req.params.productId)
     .then(product => {
-      console.log(product)
       res.render('shop/product-detail', {
         pageTitle: product.title,
         path: '/products',
         product: product
       })
     })
-    .catch(console.log)
+    .catch((err)=>console.log(err))
 }
 exports.getCart = (req, res, next) => {
   req.user.getCart()
@@ -44,7 +42,7 @@ exports.getCart = (req, res, next) => {
         products: cartProducts
       })
     })
-    .catch(console.log)
+    .catch((err)=>console.log(err))
 }
 
 exports.postCart = (req, res, next) => {
@@ -55,13 +53,13 @@ exports.postCart = (req, res, next) => {
     .then(() => {
       res.redirect('/cart')
     })
-    .catch(console.log)
+    .catch((err)=>console.log(err))
 }
 
 exports.postCartDeleteItem = (req, res, next) => {
   req.user.deleteItemFromCart(req.body.productId)
     .then(() => res.redirect('/cart'))
-    .catch(console.log)
+    .catch((err)=>console.log(err))
 }
 
 exports.postOrder = (req, res, next) => {
@@ -69,7 +67,7 @@ exports.postOrder = (req, res, next) => {
     .then(() => {
       res.redirect('/orders')
     })
-    .catch(console.log)
+    .catch((err)=>console.log(err))
 }
 
 exports.getOrders = (req, res, next) => {
@@ -82,7 +80,7 @@ exports.getOrders = (req, res, next) => {
         
       })
     })
-    .catch(console.log)
+    .catch((err)=>console.log(err))
 }
 
 exports.getCheckout = (req, res, next) => {
