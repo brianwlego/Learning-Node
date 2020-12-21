@@ -12,10 +12,12 @@ exports.postLogin = (req, res, next) => {
   User.find({name: req.body.name, email: req.body.email})
     .then(user => {
       if (user[0]){
-        console.log(user)
         req.session.isLoggedIn = true;
         req.session.user = user[0];
-        res.redirect('/')
+        req.session.save(err => {
+          console.log(err)
+          res.redirect('/')
+        })
       }
     })
     .catch(err => console.log(err))
